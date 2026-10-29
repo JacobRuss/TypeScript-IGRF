@@ -1,10 +1,10 @@
 import { loadCoefficients } from '../data/loader';
-import coefficientsData from '../data/igrf13.json';
+import coefficientsData from '../data/igrf14.json';
 
 const ALL_EPOCHS = [
     1900, 1905, 1910, 1915, 1920, 1925, 1930, 1935, 1940, 1945,
     1950, 1955, 1960, 1965, 1970, 1975, 1980, 1985, 1990, 1995,
-    2000, 2005, 2010, 2015, 2020
+    2000, 2005, 2010, 2015, 2020, 2025, 2030
 ];
 
 function compareCoefficients(
@@ -92,9 +92,9 @@ describe('Загрузка коэффициентов IGRF', () => {
         expect(() => loadCoefficients(1800)).toThrow('вне диапазона');
     });
 
-    it('должен выбрасывать ошибку для года после 2020', () => {
-        expect(() => loadCoefficients(2021)).toThrow('вне диапазона');
-        expect(() => loadCoefficients(2100)).toThrow('вне диапазона');
+    it('должен выбрасывать ошибку для года после 2030', () => {
+    expect(() => loadCoefficients(2031)).toThrow('вне диапазона');
+    expect(() => loadCoefficients(2100)).toThrow('вне диапазона');
     });
 
     it('год 1900 (левая граница) должен совпадать с JSON', () => {
@@ -106,13 +106,13 @@ describe('Загрузка коэффициентов IGRF', () => {
         compareCoefficients(result.h, epoch.coefficients.h, 5);
     });
 
-    it('год 2020 (правая граница) должен совпадать с JSON', () => {
-        const result = loadCoefficients(2020);
-        const data = coefficientsData as { epochs: Array<{ year: number; coefficients: { g: number[][]; h: number[][] } }> };
-        const epoch = data.epochs.find((e) => e.year === 2020);
-        if (!epoch) throw new Error('Нет эпохи 2020 в JSON');
-        compareCoefficients(result.g, epoch.coefficients.g, 5);
-        compareCoefficients(result.h, epoch.coefficients.h, 5);
+    it('год 2030 (правая граница) должен совпадать с JSON', () => {
+    const result = loadCoefficients(2030);
+    const data = coefficientsData as { epochs: Array<{ year: number; coefficients: { g: number[][]; h: number[][] } }> };
+    const epoch = data.epochs.find((e) => e.year === 2030);
+    if (!epoch) throw new Error('Нет эпохи 2030 в JSON');
+    compareCoefficients(result.g, epoch.coefficients.g, 5);
+    compareCoefficients(result.h, epoch.coefficients.h, 5);
     });
 
     it('год 1995 (серединная эпоха) должен совпадать с JSON', () => {
@@ -133,14 +133,28 @@ describe('Загрузка коэффициентов IGRF', () => {
         const h2 = result.h[2];
         if (!g1 || !h1 || !g2 || !h2) throw new Error('Нет строк');
 
-        expect(g1[0]).toBeCloseTo(-29424.5964, 4);
-        expect(g1[1]).toBeCloseTo(-1478.3698, 4);
-        expect(h1[1]).toBeCloseTo(4729.9846, 4);
-        expect(g2[0]).toBeCloseTo(-2470.5912, 4);
-        expect(g2[1]).toBeCloseTo(2998.308, 4);
-        expect(h2[1]).toBeCloseTo(-2912.6574, 4);
-        expect(g2[2]).toBeCloseTo(1676.649, 3);
-        expect(h2[2]).toBeCloseTo(-684.6878, 4);
+        expect(g1[0]).toBeCloseTo(-29423.957, 4);
+        expect(g1[1]).toBeCloseTo(-1478.586, 4);
+        expect(h1[1]).toBeCloseTo(4730.3756, 4);
+        expect(g2[0]).toBeCloseTo(-2470.674, 4);
+        expect(g2[1]).toBeCloseTo(2998.2896, 4);
+        expect(h2[1]).toBeCloseTo(-2912.7126, 4);
+        expect(g2[2]).toBeCloseTo(1676.58, 3);
+        expect(h2[2]).toBeCloseTo(-684.697, 4);
+    });
+
+        it('год 2027.5 должен давать значения, интерполированные между 2025 и 2030', () => {
+        const result = loadCoefficients(2027.5);
+
+        const g1 = result.g[1];
+        const h1 = result.h[1];
+        const g2 = result.g[2];
+        if (!g1 || !h1 || !g2) throw new Error('Нет строк');
+
+        expect(g1[0]).toBeCloseTo(-29318.5, 4);
+        expect(g1[1]).toBeCloseTo(-1385.3, 4);
+        expect(h1[1]).toBeCloseTo(4491.75, 4);
+        expect(g2[0]).toBeCloseTo(-2584.2, 4);
     });
 
 });

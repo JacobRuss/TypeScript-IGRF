@@ -1,4 +1,4 @@
-import coefficientsData from './igrf13.json';
+import coefficientsData from './igrf14.json';
 
 interface EpochCoefficients {
     g: number[][];

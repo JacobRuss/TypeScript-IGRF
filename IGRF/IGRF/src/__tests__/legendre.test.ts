@@ -1,13 +1,13 @@
-import { computeLegendre } from '../math/legendre';
+п»їimport { computeLegendre } from '../math/legendre';
 
 function getValue(arr: number[][], n: number, m: number): number {
     const row = arr[n];
     if (!row) {
-        throw new Error(`Отсутствует строка n=${n}`);
+        throw new Error(`РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ СЃС‚СЂРѕРєР° n=${n}`);
     }
     const value = row[m];
     if (value === undefined) {
-        throw new Error(`Отсутствует элемент (${n},${m})`);
+        throw new Error(`РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ СЌР»РµРјРµРЅС‚ (${n},${m})`);
     }
     return value;
 }
@@ -15,8 +15,8 @@ function getValue(arr: number[][], n: number, m: number): number {
 describe('computeLegendre', () => {
     const maxN = 13;
 
-    describe('Корректность вычислений', () => {
-        it('P(0,0) должен быть равен 1 при любом theta', () => {
+    describe('РљРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ РІС‹С‡РёСЃР»РµРЅРёР№', () => {
+        it('P(0,0) РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СЂР°РІРµРЅ 1 РїСЂРё Р»СЋР±РѕРј theta', () => {
             const angles = [0, Math.PI / 4, Math.PI / 2, Math.PI];
             for (const theta of angles) {
                 const result = computeLegendre(theta, 0);
@@ -25,21 +25,21 @@ describe('computeLegendre', () => {
             }
         });
 
-        it('на полюсе (theta=0) все P(n,n) для n>=1 должны быть равны 0', () => {
+        it('РЅР° РїРѕР»СЋСЃРµ (theta=0) РІСЃРµ P(n,n) РґР»СЏ n>=1 РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ СЂР°РІРЅС‹ 0', () => {
             const result = computeLegendre(0, 5);
             for (let n = 1; n <= 5; n++) {
                 expect(getValue(result.P, n, n)).toBeCloseTo(0.0, 10);
             }
         });
 
-        it('на полюсе (theta=0) зональные полиномы P(n,0) для n>=1 должны быть строго равны 1.0', () => {
+        it('РЅР° РїРѕР»СЋСЃРµ (theta=0) Р·РѕРЅР°Р»СЊРЅС‹Рµ РїРѕР»РёРЅРѕРјС‹ P(n,0) РґР»СЏ n>=1 РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ СЃС‚СЂРѕРіРѕ СЂР°РІРЅС‹ 1.0', () => {
             const result = computeLegendre(0, 5);
             for (let n = 1; n <= 5; n++) {
                 expect(getValue(result.P, n, 0)).toBeCloseTo(1.0, 10);
             }
         });
 
-        it('на полюсе (theta=0) производные dP(n,m) должны соответствовать физике поля', () => {
+        it('РЅР° РїРѕР»СЋСЃРµ (theta=0) РїСЂРѕРёР·РІРѕРґРЅС‹Рµ dP(n,m) РґРѕР»Р¶РЅС‹ СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ С„РёР·РёРєРµ РїРѕР»СЏ', () => {
             const result = computeLegendre(0, 5);
             for (let n = 1; n <= 5; n++) {
                 for (let m = 0; m <= n; m++) {
@@ -53,17 +53,17 @@ describe('computeLegendre', () => {
             }
         });
 
-        it('на экваторе (theta=pi/2) P(1,0) должен быть равен 0', () => {
+        it('РЅР° СЌРєРІР°С‚РѕСЂРµ (theta=pi/2) P(1,0) РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СЂР°РІРµРЅ 0', () => {
             const result = computeLegendre(Math.PI / 2, 1);
             expect(getValue(result.P, 1, 0)).toBeCloseTo(0.0, 10);
         });
 
-        it('на экваторе (theta=pi/2) P(1,1) должен быть ненулевым', () => {
+        it('РЅР° СЌРєРІР°С‚РѕСЂРµ (theta=pi/2) P(1,1) РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РЅРµРЅСѓР»РµРІС‹Рј', () => {
             const result = computeLegendre(Math.PI / 2, 1);
             expect(Math.abs(getValue(result.P, 1, 1))).toBeGreaterThan(0);
         });
 
-        it('значения P(2,0) должны соответствовать аналитической формуле Лежандра', () => {
+        it('Р·РЅР°С‡РµРЅРёСЏ P(2,0) РґРѕР»Р¶РЅС‹ СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ Р°РЅР°Р»РёС‚РёС‡РµСЃРєРѕР№ С„РѕСЂРјСѓР»Рµ Р›РµР¶Р°РЅРґСЂР°', () => {
             const thetas = [0, Math.PI / 6, Math.PI / 4, Math.PI / 3, Math.PI / 2];
             for (const theta of thetas) {
                 const result = computeLegendre(theta, 2);
@@ -73,7 +73,7 @@ describe('computeLegendre', () => {
             }
         });
 
-        it('производная dP(2,0) должна соответствовать аналитической формуле', () => {
+        it('РїСЂРѕРёР·РІРѕРґРЅР°СЏ dP(2,0) РґРѕР»Р¶РЅР° СЃРѕРѕС‚РІРµС‚СЃС‚РІРѕРІР°С‚СЊ Р°РЅР°Р»РёС‚РёС‡РµСЃРєРѕР№ С„РѕСЂРјСѓР»Рµ', () => {
             const thetas = [Math.PI / 6, Math.PI / 4, Math.PI / 3];
             for (const theta of thetas) {
                 const result = computeLegendre(theta, 2);
@@ -84,7 +84,7 @@ describe('computeLegendre', () => {
             }
         });
 
-        it('соответствует опорным значениям для theta = pi/3', () => {
+        it('СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РѕРїРѕСЂРЅС‹Рј Р·РЅР°С‡РµРЅРёСЏРј РґР»СЏ theta = pi/3', () => {
             const result = computeLegendre(Math.PI / 3, 3);
 
             expect(getValue(result.P, 3, 2)).toBeCloseTo(0.726184, 4);
@@ -94,7 +94,7 @@ describe('computeLegendre', () => {
             expect(getValue(result.dP, 2, 0)).toBeCloseTo(-1.299038, 5);
         });
 
-        it('все значения P и dP должны быть конечными числами', () => {
+        it('РІСЃРµ Р·РЅР°С‡РµРЅРёСЏ P Рё dP РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РєРѕРЅРµС‡РЅС‹РјРё С‡РёСЃР»Р°РјРё', () => {
             const result = computeLegendre(Math.PI / 3, maxN);
             for (let n = 0; n <= maxN; n++) {
                 for (let m = 0; m <= n; m++) {
@@ -104,7 +104,7 @@ describe('computeLegendre', () => {
             }
         });
 
-        it('результат не должен содержать NaN', () => {
+        it('СЂРµР·СѓР»СЊС‚Р°С‚ РЅРµ РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊ NaN', () => {
             const result = computeLegendre(Math.PI / 5, maxN);
             for (let n = 0; n <= maxN; n++) {
                 for (let m = 0; m <= n; m++) {
@@ -115,8 +115,8 @@ describe('computeLegendre', () => {
         });
     });
 
-    describe('Структура возвращаемых данных', () => {
-        it('размеры массивов P и dP должны быть (maxN+1) x (n+1)', () => {
+    describe('РЎС‚СЂСѓРєС‚СѓСЂР° РІРѕР·РІСЂР°С‰Р°РµРјС‹С… РґР°РЅРЅС‹С…', () => {
+        it('СЂР°Р·РјРµСЂС‹ РјР°СЃСЃРёРІРѕРІ P Рё dP РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ (maxN+1) x (n+1)', () => {
             const result = computeLegendre(Math.PI / 6, maxN);
             expect(result.P.length).toBe(maxN + 1);
             expect(result.dP.length).toBe(maxN + 1);
@@ -125,43 +125,113 @@ describe('computeLegendre', () => {
                 const rowP = result.P[n];
                 const rowDP = result.dP[n];
                 if (!rowP || !rowDP) {
-                    throw new Error(`Отсутствует строка n=${n}`);
+                    throw new Error(`РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ СЃС‚СЂРѕРєР° n=${n}`);
                 }
                 expect(rowP.length).toBe(n + 1);
                 expect(rowDP.length).toBe(n + 1);
             }
         });
 
-        it('обе матрицы должны быть разными объектами в памяти', () => {
+        it('РѕР±Рµ РјР°С‚СЂРёС†С‹ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ СЂР°Р·РЅС‹РјРё РѕР±СЉРµРєС‚Р°РјРё РІ РїР°РјСЏС‚Рё', () => {
             const result = computeLegendre(Math.PI / 4, 5);
             expect(result.P).not.toBe(result.dP);
             const rowP0 = result.P[0];
             const rowDP0 = result.dP[0];
             if (!rowP0 || !rowDP0) {
-                throw new Error('Отсутствуют строки');
+                throw new Error('РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ СЃС‚СЂРѕРєРё');
             }
             rowP0[0] = 999;
             expect(rowDP0[0]).not.toBe(999);
         });
     });
 
-    describe('Обработка исключений', () => {
-        it('должен выбрасывать контролируемую ошибку при maxN < 0', () => {
+        describe('РќРѕСЂРјРёСЂРѕРІРєР° РЁРјРёРґС‚Р°: СЌС‚Р°Р»РѕРЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ', () => {
+        // [theta, n, m, P(n,m), dP(n,m)] вЂ” Р·РЅР°С‡РµРЅРёСЏ РїРѕСЃС‡РёС‚Р°РЅС‹ РЅРµР·Р°РІРёСЃРёРјРѕР№ СЂРµР°Р»РёР·Р°С†РёРµР№ (scipy)
+        const REFERENCE: Array<[number, number, number, number, number]> = [
+            [1.0, 3, 1, 0.236846, -2.190699],
+            [1.0, 4, 1, -0.343801, -1.973124],
+            [1.0, 4, 2, 0.413038, -1.989042],
+            [1.0, 5, 1, -0.5285, 0.304855],
+            [1.0, 5, 3, 0.507019, -1.573074],
+            [1.0, 13, 5, 0.242753, 3.016153],
+            [Math.PI / 3, 3, 1, 0.132583, -2.21985],
+            [Math.PI / 3, 4, 1, -0.427908, -1.581139],
+            [Math.PI / 3, 4, 2, 0.314447, -2.178553],
+            [Math.PI / 3, 5, 1, -0.497875, 0.983375],
+            [Math.PI / 3, 5, 3, 0.424552, -1.911899],
+            [Math.PI / 3, 13, 5, 0.337074, 0.877319],
+        ];
+
+        it.each(REFERENCE)('theta=%f, (n=%i, m=%i): P=%f, dP=%f', (theta, n, m, p, dp) => {
+            const result = computeLegendre(theta, maxN);
+            expect(getValue(result.P, n, m)).toBeCloseTo(p, 5);
+            expect(getValue(result.dP, n, m)).toBeCloseTo(dp, 5);
+        });
+    });
+
+        describe('РЎРѕРіР»Р°СЃРѕРІР°РЅРЅРѕСЃС‚СЊ dP СЃ С‡РёСЃР»РµРЅРЅРѕР№ РїСЂРѕРёР·РІРѕРґРЅРѕР№', () => {
+        const h = 1e-6;
+        const THETAS = [0.3, 1.0, Math.PI / 2, 2.4];
+
+        it.each(THETAS)('theta=%f: dP СЃРѕРІРїР°РґР°РµС‚ СЃ С†РµРЅС‚СЂР°Р»СЊРЅРѕР№ СЂР°Р·РЅРѕСЃС‚СЊСЋ РґР»СЏ РІСЃРµС… (n, m)', (theta) => {
+            const center = computeLegendre(theta, maxN);
+            const plus = computeLegendre(theta + h, maxN);
+            const minus = computeLegendre(theta - h, maxN);
+
+            for (let n = 1; n <= maxN; n++) {
+                for (let m = 0; m <= n; m++) {
+                    const numeric = (getValue(plus.P, n, m) - getValue(minus.P, n, m)) / (2 * h);
+                    expect(getValue(center.dP, n, m)).toBeCloseTo(numeric, 6);
+                }
+            }
+        });
+    });
+
+        describe('РћСЂС‚РѕРіРѕРЅР°Р»СЊРЅРѕСЃС‚СЊ РїРѕ РЁРјРёРґС‚Сѓ: в€« P(n,m)ВІ sinОё dОё', () => {
+        it('СЂР°РІРµРЅ 2/(2n+1) РїСЂРё m = 0 Рё 4/(2n+1) РїСЂРё m > 0', () => {
+            const steps = 2000;
+            const dTheta = Math.PI / steps;
+
+            // РўСЂР°РїРµС†РёРё: Сѓ РєРѕРЅС†РѕРІ РІРµСЃ 0.5 (С‚Р°Рј sinОё = 0, РІРєР»Р°Рґ РЅСѓР»РµРІРѕР№)
+            const samples = Array.from({ length: steps + 1 }, (_, i) => {
+                const theta = i * dTheta;
+                const edge = i === 0 || i === steps ? 0.5 : 1;
+                return {
+                    weight: edge * Math.sin(theta) * dTheta,
+                    P: computeLegendre(theta, maxN).P,
+                };
+            });
+
+            for (let n = 1; n <= maxN; n++) {
+                for (let m = 0; m <= n; m++) {
+                    const integral = samples.reduce((acc, s) => {
+                        const v = getValue(s.P, n, m);
+                        return acc + s.weight * v * v;
+                    }, 0);
+                    const expected = (m === 0 ? 2 : 4) / (2 * n + 1);
+                    expect(integral).toBeCloseTo(expected, 5);
+                }
+            }
+        });
+    });
+
+    describe('РћР±СЂР°Р±РѕС‚РєР° РёСЃРєР»СЋС‡РµРЅРёР№', () => {
+        it('РґРѕР»Р¶РµРЅ РІС‹Р±СЂР°СЃС‹РІР°С‚СЊ РєРѕРЅС‚СЂРѕР»РёСЂСѓРµРјСѓСЋ РѕС€РёР±РєСѓ РїСЂРё maxN < 0', () => {
             expect(() => computeLegendre(Math.PI / 4, -1)).toThrow(
-                'Максимальная степень maxN не может быть отрицательной'
+                'РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ СЃС‚РµРїРµРЅСЊ maxN РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕР№'
             );
         });
 
-        it('не должен падать при theta за пределами [0, pi]', () => {
+        it('РЅРµ РґРѕР»Р¶РµРЅ РїР°РґР°С‚СЊ РїСЂРё theta Р·Р° РїСЂРµРґРµР»Р°РјРё [0, pi]', () => {
             expect(() => computeLegendre(-0.5, 3)).not.toThrow();
             expect(() => computeLegendre(Math.PI + 1, 3)).not.toThrow();
         });
 
-        it('не должен падать при очень маленьком theta', () => {
+        it('РЅРµ РґРѕР»Р¶РµРЅ РїР°РґР°С‚СЊ РїСЂРё РѕС‡РµРЅСЊ РјР°Р»РµРЅСЊРєРѕРј theta', () => {
             expect(() => computeLegendre(1e-12, 13)).not.toThrow();
         });
 
-        it('не должен падать при theta очень близком к pi', () => {
+        it('РЅРµ РґРѕР»Р¶РµРЅ РїР°РґР°С‚СЊ РїСЂРё theta РѕС‡РµРЅСЊ Р±Р»РёР·РєРѕРј Рє pi', () => {
             expect(() => computeLegendre(Math.PI - 1e-12, 13)).not.toThrow();
         });
     });
