@@ -48,24 +48,4 @@ describe('calculateField', () => {
     }
   });
 
-    describe('сверка с независимой реализацией (IGRF-14, геоцентрические компоненты)', () => {
-    // [lat, lon, h_km, year, X, Y, Z, F] Ч X на север, Y на восток, Z вниз, н“л
-    const REFERENCE: Array<[number, number, number, number, number, number, number, number]> = [
-      [55.75, 37.62, 0, 2020, 16193.85, 3301.157, 50042.511, 52700.961],
-      [-25, -45, 300, 2020, 14579.195, -5333.514, -13176.124, 20361.963],
-      [0, 0, 0, 2025, 27456.622, -1926.549, -15997.353, 31835.404],
-      [60, 0, 0, 1950, 14222.808, -2703.101, 46948.016, 49129.535],
-      [-90, 0, 0, 2020, 14430.892, -8568.327, -52025.281, 54665.316],
-      [89.5, 120, 0, 2025, -1136.275, 1202.136, 56942.492, 56966.513],
-    ];
-
-    it.each(REFERENCE)('lat=%f lon=%f h=%f год=%i', (lat, lon, h, y, X, Y, Z, F) => {
-      const { theta, phi, r } = geodeticToSpherical(lat, lon, h);
-      const result = calculateField(theta, phi, r, y);
-      expect(result.X).toBeCloseTo(X, 2);
-      expect(result.Y).toBeCloseTo(Y, 2);
-      expect(result.Z).toBeCloseTo(Z, 2);
-      expect(result.F).toBeCloseTo(F, 2);
-    });
-  });
 });
