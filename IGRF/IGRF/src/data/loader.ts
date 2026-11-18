@@ -1,4 +1,8 @@
 import coefficientsData from './igrf14.json';
+interface ReadonlyCoefficients {
+    readonly g: readonly (readonly number[])[];
+    readonly h: readonly (readonly number[])[];
+}
 
 interface EpochCoefficients {
     g: number[][];
@@ -17,22 +21,22 @@ interface CoefficientsFile {
 
 function validateCoefficients(coefficients: EpochCoefficients): void {
     if (!coefficients) {
-        throw new Error('Коэффициенты отсутствуют');
+        throw new Error('РљРѕСЌС„С„РёС†РёРµРЅС‚С‹ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚');
     }
 
     const g = coefficients.g;
     const h = coefficients.h;
 
     if (!Array.isArray(g) || !Array.isArray(h)) {
-        throw new Error('Коэффициенты g и h должны быть массивами');
+        throw new Error('РљРѕСЌС„С„РёС†РёРµРЅС‚С‹ g Рё h РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РјР°СЃСЃРёРІР°РјРё');
     }
 
     if (g.length === 0 || h.length === 0) {
-        throw new Error('Массивы коэффициентов g и h не должны быть пустыми');
+        throw new Error('РњР°СЃСЃРёРІС‹ РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ g Рё h РЅРµ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РїСѓСЃС‚С‹РјРё');
     }
 
     if (g.length !== h.length) {
-        throw new Error('Массивы g и h должны быть одинаковой длины');
+        throw new Error('РњР°СЃСЃРёРІС‹ g Рё h РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РѕРґРёРЅР°РєРѕРІРѕР№ РґР»РёРЅС‹');
     }
 
     for (let n = 0; n < g.length; n++) {
@@ -40,12 +44,12 @@ function validateCoefficients(coefficients: EpochCoefficients): void {
         const hn = h[n];
 
         if (!Array.isArray(gn) || !Array.isArray(hn)) {
-            throw new Error(`Коэффициенты для степени ${n} должны быть массивами`);
+            throw new Error(`РљРѕСЌС„С„РёС†РёРµРЅС‚С‹ РґР»СЏ СЃС‚РµРїРµРЅРё ${n} РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РјР°СЃСЃРёРІР°РјРё`);
         }
 
         if (gn.length !== hn.length) {
             throw new Error(
-                `Не совпадает количество коэффициентов для степени ${n}: g имеет ${gn.length}, h имеет ${hn.length}`
+                `РќРµ СЃРѕРІРїР°РґР°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ РґР»СЏ СЃС‚РµРїРµРЅРё ${n}: g РёРјРµРµС‚ ${gn.length}, h РёРјРµРµС‚ ${hn.length}`
             );
         }
 
@@ -53,7 +57,7 @@ function validateCoefficients(coefficients: EpochCoefficients): void {
 
         if (gn.length !== expectedLength) {
             throw new Error(
-                `Для степени ${n} ожидалось ${expectedLength} коэффициентов, получено ${gn.length}`
+                `Р”Р»СЏ СЃС‚РµРїРµРЅРё ${n} РѕР¶РёРґР°Р»РѕСЃСЊ ${expectedLength} РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРІ, РїРѕР»СѓС‡РµРЅРѕ ${gn.length}`
             );
         }
     }
@@ -65,12 +69,12 @@ function findNearestEpochs(epochs: Epoch[], year: number): { epoch1: Epoch; epoc
     const first = sorted[0];
     const last = sorted[sorted.length - 1];
     if (!first || !last) {
-        throw new Error('Массив эпох пуст');
+        throw new Error('РњР°СЃСЃРёРІ СЌРїРѕС… РїСѓСЃС‚');
     }
 
     if (year < first.year || year > last.year) {
         throw new Error(
-            `Год ${year} вне диапазона модели (${first.year}–${last.year})`
+            `Р“РѕРґ ${year} РІРЅРµ РґРёР°РїР°Р·РѕРЅР° РјРѕРґРµР»Рё (${first.year}вЂ“${last.year})`
         );
     }
 
@@ -84,7 +88,7 @@ function findNearestEpochs(epochs: Epoch[], year: number): { epoch1: Epoch; epoc
     }
 
     if (!last) {
-        throw new Error('Нет доступных эпох');
+        throw new Error('РќРµС‚ РґРѕСЃС‚СѓРїРЅС‹С… СЌРїРѕС…');
     }
     return { epoch1: last, epoch2: last };
 }
@@ -117,7 +121,7 @@ function interpolateCoefficients(
         const row2h = h2[n];
 
         if (!row1g || !row2g || !row1h || !row2h) {
-            throw new Error(`Отсутствуют коэффициенты для степени ${n}`);
+            throw new Error(`РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РєРѕСЌС„С„РёС†РёРµРЅС‚С‹ РґР»СЏ СЃС‚РµРїРµРЅРё ${n}`);
         }
 
         for (let m = 0; m < row1g.length; m++) {
@@ -127,14 +131,14 @@ function interpolateCoefficients(
             const v2h = row2h[m];
 
             if (v1g === undefined || v2g === undefined || v1h === undefined || v2h === undefined) {
-                throw new Error(`Отсутствуют коэффициенты для степени ${n}, порядка ${m}`);
+                throw new Error(`РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РєРѕСЌС„С„РёС†РёРµРЅС‚С‹ РґР»СЏ СЃС‚РµРїРµРЅРё ${n}, РїРѕСЂСЏРґРєР° ${m}`);
             }
 
             const rowG = g[n];
             const rowH = h[n];
 
             if (!rowG || !rowH) {
-                throw new Error(`Отсутствует результирующая строка для степени ${n}`);
+                throw new Error(`РћС‚СЃСѓС‚СЃС‚РІСѓРµС‚ СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰Р°СЏ СЃС‚СЂРѕРєР° РґР»СЏ СЃС‚РµРїРµРЅРё ${n}`);
             }
 
             rowG[m] = v1g + (v2g - v1g) * t;
@@ -145,7 +149,7 @@ function interpolateCoefficients(
     return { g, h };
 }
 
-function loadCoefficients(year: number): EpochCoefficients {
+function computeCoefficients(year: number): EpochCoefficients {
     const data = coefficientsData as CoefficientsFile;
 
     const { epoch1, epoch2 } = findNearestEpochs(data.epochs, year);
@@ -155,5 +159,31 @@ function loadCoefficients(year: number): EpochCoefficients {
     return coefficients;
 }
 
+const CACHE_LIMIT = 16;
+const cache = new Map<number, ReadonlyCoefficients>();
+
+function loadCoefficients(year: number): ReadonlyCoefficients {
+    if (!Number.isFinite(year)) {
+        throw new Error(`Р“РѕРґ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РєРѕРЅРµС‡РЅС‹Рј С‡РёСЃР»РѕРј, РїРѕР»СѓС‡РµРЅРѕ ${year}`);
+    }
+
+    const cached = cache.get(year);
+    if (cached !== undefined) {
+        return cached;
+    }
+
+    const coefficients = computeCoefficients(year);
+
+    if (cache.size >= CACHE_LIMIT) {
+        const oldest = cache.keys().next().value;
+        if (oldest !== undefined) {
+            cache.delete(oldest);
+        }
+    }
+    cache.set(year, coefficients);
+
+    return coefficients;
+}
+
 export { loadCoefficients };
-export type { EpochCoefficients, Epoch, CoefficientsFile };
+export type { EpochCoefficients, Epoch, ReadonlyCoefficients, CoefficientsFile };

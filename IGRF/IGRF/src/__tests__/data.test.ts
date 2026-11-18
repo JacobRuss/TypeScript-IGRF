@@ -8,29 +8,29 @@ const ALL_EPOCHS = [
 ];
 
 function compareCoefficients(
-    a: number[][],
-    b: number[][],
+    a: readonly (readonly number[])[],
+    b: readonly (readonly number[])[],
     precision: number
 ): void {
     expect(a.length).toBe(b.length);
     for (let n = 0; n < a.length; n++) {
         const rowA = a[n];
         const rowB = b[n];
-        if (!rowA || !rowB) throw new Error(`Íåò ñòðîêè n=${n}`);
+        if (!rowA || !rowB) throw new Error(`ÐÐµÑ‚ ÑÑ‚Ñ€Ð¾ÐºÐ¸ n=${n}`);
         expect(rowA.length).toBe(rowB.length);
         for (let m = 0; m < rowA.length; m++) {
             const valA = rowA[m];
             const valB = rowB[m];
             if (valA === undefined || valB === undefined) {
-                throw new Error(`Îòñóòñòâóåò ýëåìåíò (${n},${m})`);
+                throw new Error(`ÐžÑ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÐµÑ‚ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ (${n},${m})`);
             }
             expect(valA).toBeCloseTo(valB, precision);
         }
     }
 }
 
-describe('Çàãðóçêà êîýôôèöèåíòîâ IGRF', () => {
-    it('äîëæåí çàãðóæàòü êîýôôèöèåíòû äëÿ âñåõ ýïîõ', () => {
+describe('Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° ÐºÐ¾ÑÑ„Ñ„Ð¸Ñ†Ð¸ÐµÐ½Ñ‚Ð¾Ð² IGRF', () => {
+    it('Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°Ñ‚ÑŒ ÐºÐ¾ÑÑ„Ñ„Ð¸Ñ†Ð¸ÐµÐ½Ñ‚Ñ‹ Ð´Ð»Ñ Ð²ÑÐµÑ… ÑÐ¿Ð¾Ñ…', () => {
         for (const year of ALL_EPOCHS) {
             const coefficients = loadCoefficients(year);
 
@@ -45,7 +45,7 @@ describe('Çàãðóçêà êîýôôèöèåíòîâ IGRF', () => {
 
    
 
-    it('êàæäûé ïîäìàññèâ äîëæåí èìåòü ïðàâèëüíóþ äëèíó n+1 äëÿ âñåõ ýïîõ', () => {
+    it('ÐºÐ°Ð¶Ð´Ñ‹Ð¹ Ð¿Ð¾Ð´Ð¼Ð°ÑÑÐ¸Ð² Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð¸Ð¼ÐµÑ‚ÑŒ Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½ÑƒÑŽ Ð´Ð»Ð¸Ð½Ñƒ n+1 Ð´Ð»Ñ Ð²ÑÐµÑ… ÑÐ¿Ð¾Ñ…', () => {
         for (const year of ALL_EPOCHS) {
             const coefficients = loadCoefficients(year);
 
@@ -54,7 +54,7 @@ describe('Çàãðóçêà êîýôôèöèåíòîâ IGRF', () => {
                 const hn = coefficients.h[n];
 
                 if (!gn || !hn) {
-                    throw new Error(`Îòñóòñòâóþò êîýôôèöèåíòû äëÿ ñòåïåíè ${n} â ýïîõå ${year}`);
+                    throw new Error(`ÐžÑ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‚ ÐºÐ¾ÑÑ„Ñ„Ð¸Ñ†Ð¸ÐµÐ½Ñ‚Ñ‹ Ð´Ð»Ñ ÑÑ‚ÐµÐ¿ÐµÐ½Ð¸ ${n} Ð² ÑÐ¿Ð¾Ñ…Ðµ ${year}`);
                 }
 
                 expect(gn.length).toBe(n + 1);
@@ -63,14 +63,14 @@ describe('Çàãðóçêà êîýôôèöèåíòîâ IGRF', () => {
         }
     });
 
-    it('êîýôôèöèåíòû ïåðâîé ñòåïåíè (äèïîëü) äîëæíû áûòü íåíóëåâûìè äëÿ âñåõ ýïîõ', () => {
+    it('ÐºÐ¾ÑÑ„Ñ„Ð¸Ñ†Ð¸ÐµÐ½Ñ‚Ñ‹ Ð¿ÐµÑ€Ð²Ð¾Ð¹ ÑÑ‚ÐµÐ¿ÐµÐ½Ð¸ (Ð´Ð¸Ð¿Ð¾Ð»ÑŒ) Ð´Ð¾Ð»Ð¶Ð½Ñ‹ Ð±Ñ‹Ñ‚ÑŒ Ð½ÐµÐ½ÑƒÐ»ÐµÐ²Ñ‹Ð¼Ð¸ Ð´Ð»Ñ Ð²ÑÐµÑ… ÑÐ¿Ð¾Ñ…', () => {
         for (const year of ALL_EPOCHS) {
             const coefficients = loadCoefficients(year);
             const g1 = coefficients.g[1];
             const h1 = coefficients.h[1];
 
             if (!g1 || !h1) {
-                throw new Error(`Îòñóòñòâóþò êîýôôèöèåíòû n=1 äëÿ ýïîõè ${year}`);
+                throw new Error(`ÐžÑ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‚ ÐºÐ¾ÑÑ„Ñ„Ð¸Ñ†Ð¸ÐµÐ½Ñ‚Ñ‹ n=1 Ð´Ð»Ñ ÑÐ¿Ð¾Ñ…Ð¸ ${year}`);
             }
 
             const g10 = g1[0];
@@ -78,7 +78,7 @@ describe('Çàãðóçêà êîýôôèöèåíòîâ IGRF', () => {
             const h11 = h1[1];
 
             if (g10 === undefined || g11 === undefined || h11 === undefined) {
-                throw new Error(`Îòñóòñòâóþò äèïîëüíûå êîýôôèöèåíòû äëÿ ýïîõè ${year}`);
+                throw new Error(`ÐžÑ‚ÑÑƒÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‚ Ð´Ð¸Ð¿Ð¾Ð»ÑŒÐ½Ñ‹Ðµ ÐºÐ¾ÑÑ„Ñ„Ð¸Ñ†Ð¸ÐµÐ½Ñ‚Ñ‹ Ð´Ð»Ñ ÑÐ¿Ð¾Ñ…Ð¸ ${year}`);
             }
 
             expect(Math.abs(g10)).toBeGreaterThan(0);
@@ -87,51 +87,51 @@ describe('Çàãðóçêà êîýôôèöèåíòîâ IGRF', () => {
         }
     });
 
-    it('äîëæåí âûáðàñûâàòü îøèáêó äëÿ ãîäà äî 1900', () => {
-        expect(() => loadCoefficients(1899)).toThrow('âíå äèàïàçîíà');
-        expect(() => loadCoefficients(1800)).toThrow('âíå äèàïàçîíà');
+    it('Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð²Ñ‹Ð±Ñ€Ð°ÑÑ‹Ð²Ð°Ñ‚ÑŒ Ð¾ÑˆÐ¸Ð±ÐºÑƒ Ð´Ð»Ñ Ð³Ð¾Ð´Ð° Ð´Ð¾ 1900', () => {
+        expect(() => loadCoefficients(1899)).toThrow('Ð²Ð½Ðµ Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ð°');
+        expect(() => loadCoefficients(1800)).toThrow('Ð²Ð½Ðµ Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ð°');
     });
 
-    it('äîëæåí âûáðàñûâàòü îøèáêó äëÿ ãîäà ïîñëå 2030', () => {
-    expect(() => loadCoefficients(2031)).toThrow('âíå äèàïàçîíà');
-    expect(() => loadCoefficients(2100)).toThrow('âíå äèàïàçîíà');
+    it('Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð²Ñ‹Ð±Ñ€Ð°ÑÑ‹Ð²Ð°Ñ‚ÑŒ Ð¾ÑˆÐ¸Ð±ÐºÑƒ Ð´Ð»Ñ Ð³Ð¾Ð´Ð° Ð¿Ð¾ÑÐ»Ðµ 2030', () => {
+    expect(() => loadCoefficients(2031)).toThrow('Ð²Ð½Ðµ Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ð°');
+    expect(() => loadCoefficients(2100)).toThrow('Ð²Ð½Ðµ Ð´Ð¸Ð°Ð¿Ð°Ð·Ð¾Ð½Ð°');
     });
 
-    it('ãîä 1900 (ëåâàÿ ãðàíèöà) äîëæåí ñîâïàäàòü ñ JSON', () => {
+    it('Ð³Ð¾Ð´ 1900 (Ð»ÐµÐ²Ð°Ñ Ð³Ñ€Ð°Ð½Ð¸Ñ†Ð°) Ð´Ð¾Ð»Ð¶ÐµÐ½ ÑÐ¾Ð²Ð¿Ð°Ð´Ð°Ñ‚ÑŒ Ñ JSON', () => {
         const result = loadCoefficients(1900);
         const data = coefficientsData as { epochs: Array<{ year: number; coefficients: { g: number[][]; h: number[][] } }> };
         const epoch = data.epochs.find((e) => e.year === 1900);
-        if (!epoch) throw new Error('Íåò ýïîõè 1900 â JSON');
+        if (!epoch) throw new Error('ÐÐµÑ‚ ÑÐ¿Ð¾Ñ…Ð¸ 1900 Ð² JSON');
         compareCoefficients(result.g, epoch.coefficients.g, 5);
         compareCoefficients(result.h, epoch.coefficients.h, 5);
     });
 
-    it('ãîä 2030 (ïðàâàÿ ãðàíèöà) äîëæåí ñîâïàäàòü ñ JSON', () => {
+    it('Ð³Ð¾Ð´ 2030 (Ð¿Ñ€Ð°Ð²Ð°Ñ Ð³Ñ€Ð°Ð½Ð¸Ñ†Ð°) Ð´Ð¾Ð»Ð¶ÐµÐ½ ÑÐ¾Ð²Ð¿Ð°Ð´Ð°Ñ‚ÑŒ Ñ JSON', () => {
     const result = loadCoefficients(2030);
     const data = coefficientsData as { epochs: Array<{ year: number; coefficients: { g: number[][]; h: number[][] } }> };
     const epoch = data.epochs.find((e) => e.year === 2030);
-    if (!epoch) throw new Error('Íåò ýïîõè 2030 â JSON');
+    if (!epoch) throw new Error('ÐÐµÑ‚ ÑÐ¿Ð¾Ñ…Ð¸ 2030 Ð² JSON');
     compareCoefficients(result.g, epoch.coefficients.g, 5);
     compareCoefficients(result.h, epoch.coefficients.h, 5);
     });
 
-    it('ãîä 1995 (ñåðåäèííàÿ ýïîõà) äîëæåí ñîâïàäàòü ñ JSON', () => {
+    it('Ð³Ð¾Ð´ 1995 (ÑÐµÑ€ÐµÐ´Ð¸Ð½Ð½Ð°Ñ ÑÐ¿Ð¾Ñ…Ð°) Ð´Ð¾Ð»Ð¶ÐµÐ½ ÑÐ¾Ð²Ð¿Ð°Ð´Ð°Ñ‚ÑŒ Ñ JSON', () => {
         const result = loadCoefficients(1995);
         const data = coefficientsData as { epochs: Array<{ year: number; coefficients: { g: number[][]; h: number[][] } }> };
         const epoch = data.epochs.find((e) => e.year === 1995);
-        if (!epoch) throw new Error('Íåò ýïîõè 1995 â JSON');
+        if (!epoch) throw new Error('ÐÐµÑ‚ ÑÐ¿Ð¾Ñ…Ð¸ 1995 Ð² JSON');
         compareCoefficients(result.g, epoch.coefficients.g, 5);
         compareCoefficients(result.h, epoch.coefficients.h, 5);
     });
 
-    it('ãîä 2017.3 äîëæåí äàâàòü çíà÷åíèÿ, èíòåðïîëèðîâàííûå ìåæäó 2015 è 2020', () => {
+    it('Ð³Ð¾Ð´ 2017.3 Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð´Ð°Ð²Ð°Ñ‚ÑŒ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ, Ð¸Ð½Ñ‚ÐµÑ€Ð¿Ð¾Ð»Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ð¼ÐµÐ¶Ð´Ñƒ 2015 Ð¸ 2020', () => {
         const result = loadCoefficients(2017.3);
 
         const g1 = result.g[1];
         const h1 = result.h[1];
         const g2 = result.g[2];
         const h2 = result.h[2];
-        if (!g1 || !h1 || !g2 || !h2) throw new Error('Íåò ñòðîê');
+        if (!g1 || !h1 || !g2 || !h2) throw new Error('ÐÐµÑ‚ ÑÑ‚Ñ€Ð¾Ðº');
 
         expect(g1[0]).toBeCloseTo(-29423.957, 4);
         expect(g1[1]).toBeCloseTo(-1478.586, 4);
@@ -143,18 +143,58 @@ describe('Çàãðóçêà êîýôôèöèåíòîâ IGRF', () => {
         expect(h2[2]).toBeCloseTo(-684.697, 4);
     });
 
-        it('ãîä 2027.5 äîëæåí äàâàòü çíà÷åíèÿ, èíòåðïîëèðîâàííûå ìåæäó 2025 è 2030', () => {
+        it('Ð³Ð¾Ð´ 2027.5 Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð´Ð°Ð²Ð°Ñ‚ÑŒ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ, Ð¸Ð½Ñ‚ÐµÑ€Ð¿Ð¾Ð»Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ð¼ÐµÐ¶Ð´Ñƒ 2025 Ð¸ 2030', () => {
         const result = loadCoefficients(2027.5);
 
         const g1 = result.g[1];
         const h1 = result.h[1];
         const g2 = result.g[2];
-        if (!g1 || !h1 || !g2) throw new Error('Íåò ñòðîê');
+        if (!g1 || !h1 || !g2) throw new Error('ÐÐµÑ‚ ÑÑ‚Ñ€Ð¾Ðº');
 
         expect(g1[0]).toBeCloseTo(-29318.5, 4);
         expect(g1[1]).toBeCloseTo(-1385.3, 4);
         expect(h1[1]).toBeCloseTo(4491.75, 4);
         expect(g2[0]).toBeCloseTo(-2584.2, 4);
+    });
+
+    describe('ÐšÑÑˆ ÐºÐ¾ÑÑ„Ñ„Ð¸Ñ†Ð¸ÐµÐ½Ñ‚Ð¾Ð² Ð¿Ð¾ Ð³Ð¾Ð´Ñƒ', () => {
+    it('Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€Ð½Ñ‹Ð¹ Ð²Ñ‹Ð·Ð¾Ð² Ñ Ñ‚ÐµÐ¼ Ð¶Ðµ Ð³Ð¾Ð´Ð¾Ð¼ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ñ‚Ð¾Ñ‚ Ð¶Ðµ Ð¾Ð±ÑŠÐµÐºÑ‚', () => {
+        const first = loadCoefficients(2012.7);
+        const second = loadCoefficients(2012.7);
+        expect(second).toBe(first);
+    });
+
+    it('Ñ€Ð°Ð·Ð½Ñ‹Ðµ Ð³Ð¾Ð´Ñ‹ Ð´Ð°ÑŽÑ‚ Ñ€Ð°Ð·Ð½Ñ‹Ðµ Ð¾Ð±ÑŠÐµÐºÑ‚Ñ‹ Ñ Ñ€Ð°Ð·Ð½Ñ‹Ð¼Ð¸ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸ÑÐ¼Ð¸', () => {
+        const a = loadCoefficients(1987.2);
+        const b = loadCoefficients(1987.4);
+        expect(b).not.toBe(a);
+
+        const a10 = a.g[1]?.[0];
+        const b10 = b.g[1]?.[0];
+        expect(a10).toBeDefined();
+        expect(b10).toBeDefined();
+        expect(a10).not.toBe(b10);
+    });
+
+    it('Ð³Ð¾Ð´ NaN Ð¸ Infinity Ð¾Ñ‚ÐºÐ»Ð¾Ð½ÑÑŽÑ‚ÑÑ Ð¸ Ð½Ðµ Ð¿Ð¾Ð¿Ð°Ð´Ð°ÑŽÑ‚ Ð² ÐºÑÑˆ', () => {
+        expect(() => loadCoefficients(NaN)).toThrow('ÐºÐ¾Ð½ÐµÑ‡Ð½Ñ‹Ð¼ Ñ‡Ð¸ÑÐ»Ð¾Ð¼');
+        expect(() => loadCoefficients(Infinity)).toThrow('ÐºÐ¾Ð½ÐµÑ‡Ð½Ñ‹Ð¼ Ñ‡Ð¸ÑÐ»Ð¾Ð¼');
+        expect(() => loadCoefficients(-Infinity)).toThrow('ÐºÐ¾Ð½ÐµÑ‡Ð½Ñ‹Ð¼ Ñ‡Ð¸ÑÐ»Ð¾Ð¼');
+    });
+
+    it('Ð¿Ñ€Ð¸ Ð¿ÐµÑ€ÐµÐ¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ð¸ ÐºÑÑˆÐ° ÑÐ°Ð¼Ð°Ñ ÑÑ‚Ð°Ñ€Ð°Ñ Ð·Ð°Ð¿Ð¸ÑÑŒ Ð²Ñ‹Ñ‚ÐµÑÐ½ÑÐµÑ‚ÑÑ', () => {
+        const oldest = loadCoefficients(2001.5);
+
+        for (let i = 1; i <= 16; i++) {
+            loadCoefficients(1910 + i / 7);
+        }
+
+        const again = loadCoefficients(2001.5);
+        expect(again).not.toBe(oldest);
+        compareCoefficients(again.g, oldest.g, 10);
+        compareCoefficients(again.h, oldest.h, 10);
+    });
+
     });
 
 });
