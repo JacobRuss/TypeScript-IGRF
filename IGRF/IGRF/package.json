@@ -7,13 +7,16 @@
     "files": [
         "dist"
     ],
-    "scripts": {
-        "test": "jest",
-        "build": "tsc --build",
-        "clean": "tsc --build --clean",
-        "lint": "eslint src --ext .ts",
-        "format": "prettier --write \"src/**/*.ts\""
-    },
+  "scripts": {
+    "test": "jest",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "dev": "vite",
+    "preview": "vite preview",
+    "build:web": "vite build"
+  },
     "keywords": [],
     "author": "",
     "license": "ISC",
@@ -24,6 +27,7 @@
         "eslint": "^10.3.0",
         "jest": "^30.3.0",
         "ts-jest": "^29.4.9",
-        "typescript": "^6.0.3"
+        "typescript": "^6.0.3",
+        "vite": "^8.3.8"
     }
 }
